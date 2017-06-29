@@ -1,0 +1,34 @@
+{
+  "name": "secret-box",
+  "version": "1.0.0",
+  "description": "my secret box",
+  "main": "server.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha test/*-test.js",
+    "start": "nodemon server.js",
+    "debug": "NODE_ENV=test mocha debug test/*-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seth-at-at/secret-box-m4"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "Seth",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "knex": "^0.13.0",
+    "md5": "^2.2.1",
+    "pg": "^6.4.0"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2",
+    "nodemon": "^1.11.0",
+    "pryjs": "^1.0.3",
+    "request": "^2.81.0"
+  }
+}
