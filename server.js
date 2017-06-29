@@ -2,9 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser') //> ability to parse the body of an HTTP request
 const md5 = require('md5') //>  unique value based on the content of the message
-const environment = process.env.NODE_ENV || 'development';
-const configuration = require('./knexfile')[environment];
-const database = require('knex')(configuration);
+const Secret = require('./lib/models/secret')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -22,7 +20,7 @@ app.listen(app.get('port'), function() {
 
 app.get('/api/secrets/:id', function(request, response) {
   let id = request.params.id
-  let message = database.raw("SELECT * FROM secrets WHERE id=?", [id])
+  let message = Secret.find(id)
     .then(function(data){
       if (data.rowCount == 0) { return response.sendStatus(404) }
       var secret = data.rows[0]

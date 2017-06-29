@@ -1,10 +1,8 @@
-const assert  = require('chai').assert
-const app     = require('../server')
-const request = require('request')
-const environment = process.env.NODE_ENV || 'development';
-const configuration = require('../knexfile')[environment];
-const database = require('knex')(configuration);
-const pry = require('pryjs')
+const assert        = require('chai').assert
+const app           = require('../server')
+const request       = require('request')
+const Secret        = require('../lib/models/secret')
+const pry           = require('pryjs')
 
 describe('Server', function(){
   before(function(done){
@@ -70,15 +68,13 @@ describe('Server', function(){
   describe('GET /api/secrets/:id', function(){
     this.timeout(100000000)
     beforeEach(function(done) {
-      database.raw(
-        'INSERT INTO secrets (message, created_at) VALUES (?, ?)',
-        ["I open bananas from the wrong side", new Date]
-      ).then(function() { done() });
+      Secret.create("I open bananas from the wrong side")
+      .then(function() { done() })
     })
 
     afterEach(function(done) {
-      database.raw('TRUNCATE secrets RESTART IDENTITY')
-      .then(function() { done() });
+      Secret.destroyAll()
+      .then(function() { done() })
     })
 
     it('should return a 404 if the resource is not found', function(done) {
@@ -91,7 +87,7 @@ describe('Server', function(){
 
     it('should have the id and message from the resource', function(done) {
       let ourRequest = this.request
-      database.raw("SELECT * FROM secrets LIMIT 1")
+      Secret.first()
         .then(function(data){
           let id = data.rows[0].id
           let message = data.rows[0].message
